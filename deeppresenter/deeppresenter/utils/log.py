@@ -48,12 +48,25 @@ R = TypeVar("R")
 _global_file_handler: logging.Handler | None = None
 
 
+def _get_app_log_dir() -> Path:
+    """Get the application log directory (works for both source and PyInstaller bundle)."""
+    if getattr(sys, 'frozen', False):
+        # Running from PyInstaller bundle - use executable's directory
+        app_dir = Path(sys.executable).parent
+    else:
+        # Running from source - use project root (3 levels up from this file)
+        app_dir = Path(__file__).parent.parent.parent.parent
+
+    log_dir = app_dir / "logs"
+    log_dir.mkdir(exist_ok=True)
+    return log_dir
+
+
 def get_global_file_handler() -> logging.Handler:
     """Get or create the global file handler for unified logging."""
     global _global_file_handler
     if _global_file_handler is None:
-        log_dir = Path("logs")
-        log_dir.mkdir(exist_ok=True)
+        log_dir = _get_app_log_dir()
         log_file = log_dir / f"pptagent-{datetime.now().strftime('%Y%m%d')}.log"
 
         _global_file_handler = RotatingFileHandler(
