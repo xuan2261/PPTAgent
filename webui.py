@@ -51,6 +51,16 @@ gradio_css = """
                 margin-bottom: 20px;
                 opacity: 0.8;
             }
+            .token-display {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                line-height: 1.6;
+                padding: 10px;
+            }
+            .token-display h2 {
+                color: #2c3e50;
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
             .gradio-container {
                 max-width: 100% !important;
                 overflow-x: hidden !important;
@@ -134,6 +144,11 @@ class ChatDemo:
                         elem_classes=["chat-container"],
                     )
 
+                    with gr.Accordion("📊 Token 使用统计", open=False):
+                        token_display = gr.Markdown(
+                            value="暂无数据",
+                            elem_classes=["token-display"],
+                        )
                     with gr.Row():
                         pages_dd = gr.Dropdown(
                             label=get_text("pages_label", default_lang),
@@ -222,6 +237,67 @@ class ChatDemo:
                 ],
             )
 
+            def collect_token_stats(loop) -> str:
+                """收集所有 agents 的 token 统计并生成显示文本"""
+                all_agent_costs = {}
+
+                if hasattr(loop, "research_agent") and loop.research_agent:
+                    all_agent_costs["Research Agent"] = {
+                        "prompt": getattr(loop.research_agent.cost, "prompt", 0),
+                        "completion": getattr(
+                            loop.research_agent.cost, "completion", 0
+                        ),
+                        "total": getattr(loop.research_agent.cost, "total", 0),
+                        "model": getattr(loop.research_agent, "model", "N/A"),
+                    }
+
+                if hasattr(loop, "designagent") and loop.designagent:
+                    all_agent_costs["Design Agent"] = {
+                        "prompt": getattr(loop.designagent.cost, "prompt", 0),
+                        "completion": getattr(loop.designagent.cost, "completion", 0),
+                        "total": getattr(loop.designagent.cost, "total", 0),
+                        "model": getattr(loop.designagent, "model", "N/A"),
+                    }
+                elif hasattr(loop, "pptagent") and loop.pptagent:
+                    all_agent_costs["PPT Agent"] = {
+                        "prompt": getattr(loop.pptagent.cost, "prompt", 0),
+                        "completion": getattr(loop.pptagent.cost, "completion", 0),
+                        "total": getattr(loop.pptagent.cost, "total", 0),
+                        "model": getattr(loop.pptagent, "model", "N/A"),
+                    }
+
+                token_lines = ["## Token 使用统计\n"]
+                total_prompt = 0
+                total_completion = 0
+                total_all = 0
+
+                for agent_name, cost_info in all_agent_costs.items():
+                    prompt = cost_info.get("prompt", 0)
+                    completion = cost_info.get("completion", 0)
+                    total = cost_info.get("total", 0)
+                    model = cost_info.get("model", "N/A")
+                    total_prompt += prompt
+                    total_completion += completion
+                    total_all += total
+
+                    token_lines.append(
+                        f"**{agent_name}** (Model: `{model}`)  \n"
+                        f"- 输入: {prompt:,} tokens  \n"
+                        f"- 输出: {completion:,} tokens  \n"
+                        f"- 小计: {total:,} tokens  \n"
+                    )
+
+                if total_all > 0:
+                    token_lines.append("\n---\n")
+                    token_lines.append(
+                        f"**总计**  \n"
+                        f"- 输入: {total_prompt:,} tokens  \n"
+                        f"- 输出: {total_completion:,} tokens  \n"
+                        f"- **总计: {total_all:,} tokens**"
+                    )
+
+                return "\n".join(token_lines) if total_all > 0 else "暂无 token 数据"
+
             async def send_message(
                 message,
                 history,
@@ -241,6 +317,7 @@ class ChatDemo:
                         history,
                         message,
                         gr.update(value=None),
+                        gr.update(),
                         gr.update(),
                     )
                     return
@@ -287,11 +364,15 @@ class ChatDemo:
                         aggregated_parts.append(file_content)
                         aggregated_text = "\n\n".join(aggregated_parts).strip()
                         history[-1]["content"] = aggregated_text
+
+                        token_text = collect_token_stats(loop)
+
                         yield (
                             history,
                             "",
                             gr.update(value=None),
                             gr.update(value=str(yield_msg)),
+                            gr.update(value=token_text),
                         )
 
                     elif isinstance(yield_msg, ChatMessage):
@@ -322,11 +403,14 @@ class ChatDemo:
                         aggregated_text = "\n\n".join(aggregated_parts).strip()
                         history[-1]["content"] = aggregated_text
 
+                        token_text = collect_token_stats(loop)
+
                         yield (
                             history,
                             message,
                             gr.update(value=None),
                             gr.update(),
+                            gr.update(value=token_text),
                         )
 
                     else:
@@ -350,6 +434,7 @@ class ChatDemo:
                     msg_input,
                     attachments_input,
                     download_btn,
+                    token_display,
                 ],
                 concurrency_limit=None,
             )
@@ -370,6 +455,7 @@ class ChatDemo:
                     msg_input,
                     attachments_input,
                     download_btn,
+                    token_display,
                 ],
                 concurrency_limit=None,
             )
