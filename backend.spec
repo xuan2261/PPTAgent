@@ -13,7 +13,7 @@ a = Analysis(
     binaries=gradio_binaries,
     datas=[
         ('locales', 'locales'),
-        ('pptagent/templates', 'pptagent/templates'),
+        ('pptagent/pptagent/templates', 'pptagent/templates'),
     ] + gradio_data,
     hiddenimports=[
         'gradio', 'uvicorn', 'starlette', 'httpx', 'websockets',
