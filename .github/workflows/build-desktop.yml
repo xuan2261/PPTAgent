@@ -12,6 +12,9 @@ on:
         default: 'false'
         type: boolean
 
+permissions:
+  contents: write  # Required for creating GitHub Releases
+
 jobs:
   build-windows:
     runs-on: windows-latest
