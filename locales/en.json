@@ -1,0 +1,16 @@
+{
+  "_comment": "English translations for PPTAgent WebUI",
+  "app_title": "DeepPresenter",
+  "pages_label": "Number of slides",
+  "pages_auto": "auto",
+  "output_type_label": "Output type",
+  "output_freeform": "Freeform",
+  "output_template": "Template",
+  "template_label": "Select template",
+  "send_button": "Send",
+  "download_button": "Download file",
+  "input_placeholder": "Your instruction here",
+  "default_instruction": "Please create a PPT based on the uploaded attachments",
+  "slide_complete": "Slides generated successfully, click button below to download",
+  "language_label": "Language"
+}

@@ -1,0 +1,16 @@
+{
+  "_comment": "Vietnamese translations for PPTAgent WebUI",
+  "app_title": "DeepPresenter",
+  "pages_label": "Số trang slide",
+  "pages_auto": "tự động",
+  "output_type_label": "Loại đầu ra",
+  "output_freeform": "Tự do",
+  "output_template": "Mẫu",
+  "template_label": "Chọn mẫu",
+  "send_button": "Gửi",
+  "download_button": "Tải xuống",
+  "input_placeholder": "Nhập hướng dẫn của bạn",
+  "default_instruction": "Vui lòng tạo PPT dựa trên tệp đính kèm",
+  "slide_complete": "Đã tạo slide thành công, nhấn nút bên dưới để tải",
+  "language_label": "Ngôn ngữ"
+}
