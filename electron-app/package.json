@@ -42,7 +42,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "icip-cas",
+      "owner": "xuan2261",
       "repo": "PPTAgent"
     }
   }
