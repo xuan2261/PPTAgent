@@ -51,14 +51,21 @@ _global_file_handler: logging.Handler | None = None
 def _get_app_log_dir() -> Path:
     """Get the application log directory (works for both source and PyInstaller bundle)."""
     if getattr(sys, 'frozen', False):
-        # Running from PyInstaller bundle - use executable's directory
-        app_dir = Path(sys.executable).parent
+        # Running from PyInstaller bundle - use user's app data directory
+        # This avoids permission issues in C:\Program Files\
+        if sys.platform == 'win32':
+            base = Path(os.environ.get('LOCALAPPDATA', Path.home()))
+        elif sys.platform == 'darwin':
+            base = Path.home() / 'Library' / 'Application Support'
+        else:
+            base = Path.home() / '.local' / 'share'
+        log_dir = base / 'PPTAgent' / 'logs'
     else:
         # Running from source - use project root (3 levels up from this file)
         app_dir = Path(__file__).parent.parent.parent.parent
+        log_dir = app_dir / "logs"
 
-    log_dir = app_dir / "logs"
-    log_dir.mkdir(exist_ok=True)
+    log_dir.mkdir(parents=True, exist_ok=True)
     return log_dir
 
 

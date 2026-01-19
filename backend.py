@@ -3,7 +3,11 @@ import sys
 import socket
 import signal
 import logging
+import argparse
 from pathlib import Path
+
+# Emit early signal BEFORE heavy imports - helps Electron detect startup
+print("PPTAgent backend initializing...", flush=True)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -46,6 +50,11 @@ signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 def main():
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='PPTAgent Backend Server')
+    parser.add_argument('--port', type=int, default=None, help='Port to run the server on')
+    args = parser.parse_args()
+
     from deeppresenter.utils.log import log_startup
 
     log_startup("PPTAgent Backend")
@@ -54,7 +63,8 @@ def main():
     from webui import ChatDemo
     from deeppresenter.utils.constants import WORKSPACE_BASE
 
-    port = find_available_port()
+    # Use provided port or find available one
+    port = args.port if args.port else find_available_port()
     chat_demo = ChatDemo()
     demo = chat_demo.create_interface()
 

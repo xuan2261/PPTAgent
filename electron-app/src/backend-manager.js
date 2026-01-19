@@ -68,21 +68,34 @@ class BackendManager {
       const backendPath = this.getBackendPath();
       console.log(`Starting backend: ${backendPath}`);
 
-      this.process = spawn(backendPath, ['-u'], {
+      this.process = spawn(backendPath, ['-u', '--port', this.port.toString()], {
         stdio: ['pipe', 'pipe', 'pipe'],
         windowsHide: true,
       });
 
       const timeout = setTimeout(() => {
-        reject(new Error('Backend startup timeout (30s)'));
-      }, 30000);
+        reject(new Error('Backend startup timeout (60s)'));
+      }, 60000);
 
       this.process.stdout.on('data', (data) => {
         const output = data.toString();
         console.log(`[Backend] ${output}`);
-        // Match dynamic port pattern
+
+        // Log initialization progress (don't resolve yet)
+        if (output.includes('initializing')) {
+          console.log('Backend is initializing...');
+          return;
+        }
+
+        // Match dynamic port pattern - support multiple Gradio output formats
         const portMatch = output.match(/localhost:(\d+)/);
-        if (output.includes('Running on') || portMatch) {
+        const isReady =
+          output.includes('Running on') ||           // Gradio standard
+          output.includes('Launching Gradio') ||     // Custom log
+          output.includes('local URL:') ||           // Gradio URL format
+          portMatch;
+
+        if (isReady) {
           if (portMatch) {
             this.port = parseInt(portMatch[1], 10);
           }
