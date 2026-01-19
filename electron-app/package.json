@@ -1,6 +1,6 @@
 {
   "name": "pptagent-desktop",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "PPTAgent Desktop - AI Presentation Generator",
   "main": "src/main.js",
   "scripts": {
