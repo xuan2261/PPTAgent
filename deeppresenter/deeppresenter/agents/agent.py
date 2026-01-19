@@ -213,9 +213,14 @@ class Agent:
         Loop interface, return the message or the outcome filepath of the agent.
         """
 
-    @abstractmethod
     async def finish(self, result: str):
-        """This function defines when and how should an agent finish their tasks, combined with outcome check"""
+        """This function defines when and how should an agent finish their tasks, combined with outcome check.
+
+        Default implementation saves history and returns result.
+        Subclasses can override for custom finish behavior.
+        """
+        self.save_history()
+        return result
 
     async def execute(self, tool_calls: list[ToolCall]) -> str | list[ChatMessage]:
         coros = []

@@ -6,25 +6,9 @@
       <div align="center">
         <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=en">English</a>
         | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=zh-CN">简体中文</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=zh-TW">繁體中文</a>
         | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=ja">日本語</a>
         | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=ko">한국어</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=hi">हिन्दी</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=th">ไทย</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=fr">Français</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=de">Deutsch</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=es">Español</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=it">Italiano</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=ru">Русский</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=pt">Português</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=nl">Nederlands</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=pl">Polski</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=ar">العربية</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=fa">فارسی</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=tr">Türkçe</a>
         | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=vi">Tiếng Việt</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=id">Bahasa Indonesia</a>
-        | <a href="https://openaitx.github.io/view.html?user=icip-cas&project=PPTAgent&lang=as">অসমীয়া</a>
       </div>
     </div>
   </details>
@@ -36,199 +20,153 @@
 
 https://github.com/user-attachments/assets/938889e8-d7d8-4f4f-b2a1-07ee3ef3991a
 
-## 📫 Contact
-> The main contributor of this repo is a Master's student graduating in 2026, currently on the job market. Feel free to reach out for collaboration or job opportunities.
->
-> 本仓库的主要贡献者是一名 2026 届硕士毕业生，正在求职中，欢迎联系。
+## About
 
-<div align="center">
-  <img src="resource/wechat.jpg" width="140px">
-</div>
+**PPTAgent** is an AI-powered presentation generation system that creates professional PowerPoint presentations from documents. Published at **EMNLP 2025**, it features a two-stage pipeline and multi-agent architecture.
 
-## 📅 News
-- [2026/01]: We support freeform and template generation support PPTX export, offline mode now! .
-- [2025/12]: 🔥 Released V2 with major improvements - Deep Research Integration, Free-Form Visual Design, Autonomous Asset Creation, Text-to-Image Generation, and Agent Environment with sandbox & 20+ tools.
-- [2025/09]: 🛠️ MCP server support added - see [MCP Server](PPTAgent/DOC.md#mcp-server-) for configuration details
-- [2025/09]: 🚀 Released v2 with major improvements - see [release notes](https://github.com/icip-cas/PPTAgent/releases/tag/v0.2.0) for details
-- [2025/08]: 🎉 Paper accepted to **EMNLP 2025**!
-- [2025/05]: ✨ Released v1 with core functionality and 🌟 breakthrough: reached 1,000 stars on GitHub! - see [release notes](https://github.com/icip-cas/PPTAgent/releases/tag/v0.1.0) for details
-- [2025/01]: 🔓 Open-sourced the codebase, with experimental code archived at [experiment release](https://github.com/icip-cas/PPTAgent/releases/tag/experiment)
+### Key Features
 
-## 📖 Usage
+- **Template-Based Generation** - Two-stage pipeline with SlideInducter and PPTGen
+- **Freeform Generation** - Multi-agent system with Research and Design agents
+- **20+ MCP Tools** - Web search, paper search, image generation, and more
+- **Offline Mode** - Support for local deployment without external APIs
+- **PPTX Export** - Professional PowerPoint output
 
-> [!IMPORTANT]
-> 1. All these API keys, configurations, and services are **required**.
-> 2. Agent Backbone Recommendation: Use Claude for the Research Agent and Gemini for the Design Agent. GLM-4.7 is also a good choice in open-source models.
-> 3. Offline mode is supported with limited capabilities (see Offline Setup below).
+## Documentation
 
+| Document | Description |
+|----------|-------------|
+| [Project Overview](docs/project-overview-pdr.md) | Vision, goals, requirements |
+| [Codebase Summary](docs/codebase-summary.md) | Directory structure, key files |
+| [Code Standards](docs/code-standards.md) | Python style, conventions |
+| [System Architecture](docs/system-architecture.md) | Technical architecture, data flow |
+| [Project Roadmap](docs/project-roadmap.md) | Version history, future plans |
 
-### 1. Set up agent environment & MCP
+## News
 
-- **Agent sandbox (Docker)**: Build the sandbox image using the provided [Dockerfile](deeppresenter/docker/Dockerfile):
+- **[2026/01]**: PPTX export and offline mode support
+- **[2025/12]**: 🔥 V2 with Deep Research, Free-Form Design, Agent Environment
+- **[2025/09]**: MCP server support - see [MCP Server](PPTAgent/DOC.md#mcp-server-)
+- **[2025/08]**: 🎉 Paper accepted to **EMNLP 2025**!
+- **[2025/05]**: ✨ v1 released, reached 1,000 GitHub stars!
 
-  ```bash
-  bash deeppresenter/docker/build.sh
-  ```
-### 2. Prepare external services
+## Quick Start
 
-##### Online Setup:
+### Prerequisites
 
-- **MinerU**: Apply for an API key at [mineru.net](https://mineru.net/apiManage/docs). Note that each key is valid for 14 days.
-- **Tavily (optional)**: Apply for an API key at [tavily.com](https://www.tavily.com/).
-- **LLM**: Copy `deeppresenter/deeppresenter/config.yaml.example` to `deeppresenter/deeppresenter/config.yaml`, then set your model endpoint, API keys, and related parameters.
+> **Required**: API keys, Docker for sandbox, Python 3.11+
 
-- **MCP server**: Copy `deeppresenter/deeppresenter/mcp.json.example` to `deeppresenter/deeppresenter/mcp.json`, then configure the MCP server.
-- **Additional tools**:
+### 1. Set up agent environment
 
-  ```bash
-  pip install playwright
-  playwright install-deps
-  playwright install chromium
-  npm install
-  npx playwright install chromium
-  ```
+```bash
+bash deeppresenter/docker/build.sh
+```
 
-##### Offline Setup:
+### 2. Configure external services
 
-- **MinerU**: Deploy the MinerU server by following the instructions at [MinerU docker guide](https://opendatalab.github.io/MinerU/quick_start/docker_deployment/#start-services-directly-with-docker-compose)
-- **Config switch**: Set `offline_mode: true` in [`config.yaml`](deeppresenter/deeppresenter/config.yaml) to avoid loading network-dependent tools (e.g., `research`, `fetch`, `search`).
-- **MinerU endpoint**: Set `MINERU_API_URL` in [`mcp.json`](deeppresenter/deeppresenter/mcp.json) to your local MinerU service URL
+**Online Setup:**
+- **MinerU**: Get API key at [mineru.net](https://mineru.net/apiManage/docs)
+- **Tavily** (optional): Get API key at [tavily.com](https://www.tavily.com/)
+- **LLM**: Copy `deeppresenter/deeppresenter/config.yaml.example` to `config.yaml`
+- **MCP**: Copy `deeppresenter/deeppresenter/mcp.json.example` to `mcp.json`
 
-### 3. Install Python dependencies
+**Offline Setup:**
+- Deploy MinerU locally: [MinerU docker guide](https://opendatalab.github.io/MinerU/quick_start/docker_deployment/)
+- Set `offline_mode: true` in `config.yaml`
 
-From the project root directory, run:
+### 3. Install dependencies
 
 ```bash
 pip install -e deeppresenter
+pip install playwright && playwright install chromium
+npm install && npx playwright install chromium
 ```
 
-### 4. Launch the web demo
-
-Also from the project root directory, run:
+### 4. Launch
 
 ```bash
 python webui.py
 ```
 
-> [!TIP]
-> 🚀 All configurable variables can be found in [constants.py](deeppresenter/deeppresenter/utils/constants.py).
+> 💡 Configuration: [constants.py](deeppresenter/deeppresenter/utils/constants.py)
 
-## 💡 Case Study
+## Case Studies
 
-- #### Prompt: Please present the given document to me.
+### Document Presentation
+> Prompt: "Please present the given document to me."
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-
-  <img src="resource/v2/manuscript/0001.jpg" alt="图片1" width="200"/>
-
-  <img src="resource/v2/manuscript/0002.jpg" alt="图片2" width="200"/>
-
-  <img src="resource/v2/manuscript/0003.jpg" alt="图片3" width="200"/>
-
-  <img src="resource/v2/manuscript/0004.jpg" alt="图片4" width="200"/>
-
-  <img src="resource/v2/manuscript/0005.jpg" alt="图片5" width="200"/>
-
-  <img src="resource/v2/manuscript/0006.jpg" alt="图片6" width="200"/>
-
-  <img src="resource/v2/manuscript/0007.jpg" alt="图片7" width="200"/>
-
-  <img src="resource/v2/manuscript/0008.jpg" alt="图片8" width="200"/>
-
-  <img src="resource/v2/manuscript/0009.jpg" alt="图片9" width="200"/>
-
-  <img src="resource/v2/manuscript/0010.jpg" alt="图片10" width="200"/>
-
+  <img src="resource/v2/manuscript/0001.jpg" alt="Slide 1" width="200"/>
+  <img src="resource/v2/manuscript/0002.jpg" alt="Slide 2" width="200"/>
+  <img src="resource/v2/manuscript/0003.jpg" alt="Slide 3" width="200"/>
+  <img src="resource/v2/manuscript/0004.jpg" alt="Slide 4" width="200"/>
 </div>
 
-- #### Prompt: 请介绍小米 SU7 的外观和价格
+### Product Introduction
+> Prompt: "请介绍小米 SU7 的外观和价格"
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-
-  <img src="resource/v2/presentation1/0001.jpg" alt="图片1" width="200"/>
-
-  <img src="resource/v2/presentation1/0002.jpg" alt="图片2" width="200"/>
-
-  <img src="resource/v2/presentation1/0003.jpg" alt="图片3" width="200"/>
-
-  <img src="resource/v2/presentation1/0004.jpg" alt="图片4" width="200"/>
-
-  <img src="resource/v2/presentation1/0005.jpg" alt="图片5" width="200"/>
-
-  <img src="resource/v2/presentation1/0006.jpg" alt="图片6" width="200"/>
-
+  <img src="resource/v2/presentation1/0001.jpg" alt="Slide 1" width="200"/>
+  <img src="resource/v2/presentation1/0002.jpg" alt="Slide 2" width="200"/>
+  <img src="resource/v2/presentation1/0003.jpg" alt="Slide 3" width="200"/>
 </div>
 
-- #### Prompt: 请制作一份高中课堂展示课件，主题为“解码立法过程：理解其对国际关系的影响”
+### Educational Content
+> Prompt: "请制作一份高中课堂展示课件，主题为'解码立法过程'"
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+  <img src="resource/v2/presentation2/0001.jpg" alt="Slide 1" width="200"/>
+  <img src="resource/v2/presentation2/0002.jpg" alt="Slide 2" width="200"/>
+  <img src="resource/v2/presentation2/0003.jpg" alt="Slide 3" width="200"/>
+</div>
 
-  <img src="resource/v2/presentation2/0001.jpg" alt="图片1" width="200"/>
+## Architecture
 
-  <img src="resource/v2/presentation2/0002.jpg" alt="图片2" width="200"/>
+```
+PPTAgent/
+├── pptagent/          # Core library (Template mode)
+│   ├── induct.py      # SlideInducter (Stage I)
+│   ├── pptgen.py      # PPTGen (Stage II)
+│   └── templates/     # Built-in templates
+├── deeppresenter/     # Multi-agent system (Freeform mode)
+│   ├── main.py        # AgentLoop
+│   ├── env.py         # AgentEnv + MCP
+│   └── agents/        # Research & Design agents
+└── webui.py           # Gradio interface
+```
 
-  <img src="resource/v2/presentation2/0003.jpg" alt="图片3" width="200"/>
+See [System Architecture](docs/system-architecture.md) for details.
 
-  <img src="resource/v2/presentation2/0004.jpg" alt="图片4" width="200"/>
+## Contact
 
-  <img src="resource/v2/presentation2/0005.jpg" alt="图片5" width="200"/>
+> The main contributor is a Master's student graduating in 2026, currently on the job market.
 
-  <img src="resource/v2/presentation2/0006.jpg" alt="图片6" width="200"/>
-
-  <img src="resource/v2/presentation2/0007.jpg" alt="图片7" width="200"/>
-
-  <img src="resource/v2/presentation2/0008.jpg" alt="图片8" width="200"/>
-
-  <img src="resource/v2/presentation2/0009.jpg" alt="图片9" width="200"/>
-
-  <img src="resource/v2/presentation2/0010.jpg" alt="图片10" width="200"/>
-
-  <img src="resource/v2/presentation2/0011.jpg" alt="图片11" width="200"/>
-
-  <img src="resource/v2/presentation2/0012.jpg" alt="图片12" width="200"/>
-
-  <img src="resource/v2/presentation2/0013.jpg" alt="图片13" width="200"/>
-
-  <img src="resource/v2/presentation2/0014.jpg" alt="图片14" width="200"/>
-
-  <img src="resource/v2/presentation2/0015.jpg" alt="图片15" width="200"/>
-
+<div align="center">
+  <img src="resource/wechat.jpg" width="140px">
 </div>
 
 ---
 
-
 [![Star History Chart](https://api.star-history.com/svg?repos=icip-cas/PPTAgent&type=Date)](https://star-history.com/#icip-cas/PPTAgent&Date)
 
-## Citation 🙏
+## Citation
 
-If you find this project helpful, please use the following to cite it:
 ```bibtex
 @inproceedings{zheng-etal-2025-pptagent,
     title = "{PPTA}gent: Generating and Evaluating Presentations Beyond Text-to-Slides",
-    author = "Zheng, Hao  and
-      Guan, Xinyan  and
-      Kong, Hao  and
-      Zhang, Wenkai  and
-      Zheng, Jia  and
-      Zhou, Weixiang  and
-      Lin, Hongyu  and
-      Lu, Yaojie  and
-      Han, Xianpei  and
-      Sun, Le",
-    editor = "Christodoulopoulos, Christos  and
-      Chakraborty, Tanmoy  and
-      Rose, Carolyn  and
-      Peng, Violet",
+    author = "Zheng, Hao and Guan, Xinyan and Kong, Hao and Zhang, Wenkai and
+              Zheng, Jia and Zhou, Weixiang and Lin, Hongyu and Lu, Yaojie and
+              Han, Xianpei and Sun, Le",
     booktitle = "Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing",
     month = nov,
     year = "2025",
-    address = "Suzhou, China",
     publisher = "Association for Computational Linguistics",
     url = "https://aclanthology.org/2025.emnlp-main.728/",
     doi = "10.18653/v1/2025.emnlp-main.728",
     pages = "14413--14429",
-    ISBN = "979-8-89176-332-6",
-    abstract = "Automatically generating presentations from documents is a challenging task that requires accommodating content quality, visual appeal, and structural coherence. Existing methods primarily focus on improving and evaluating the content quality in isolation, overlooking visual appeal and structural coherence, which limits their practical applicability. To address these limitations, we propose PPTAgent, which comprehensively improves presentation generation through a two-stage, edit-based approach inspired by human workflows. PPTAgent first analyzes reference presentations to extract slide-level functional types and content schemas, then drafts an outline and iteratively generates editing actions based on selected reference slides to create new slides. To comprehensively evaluate the quality of generated presentations, we further introduce PPTEval, an evaluation framework that assesses presentations across three dimensions: Content, Design, and Coherence. Results demonstrate that PPTAgent significantly outperforms existing automatic presentation generation methods across all three dimensions."
 }
 ```
+
+## License
+
+MIT License - ICIP-CAS 2025

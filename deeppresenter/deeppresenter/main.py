@@ -21,7 +21,7 @@ class AgentLoop:
         self,
         config: DeepPresenterConfig = GLOBAL_CONFIG,
         session_id: str | None = None,
-        workspace: Path = None,
+        workspace: Path | None = None,
         language: Literal["zh", "en"] = "en",
     ):
         self.config = config

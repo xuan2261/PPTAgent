@@ -14,6 +14,11 @@ from platformdirs import user_cache_dir
 from pptagent import PPTAgentServer
 from utils.i18n import get_text, get_available_languages
 
+# UI Constants
+UI_CHATBOT_HEIGHT = 300
+MAX_THREADS = 16
+SUPPORTED_LANGUAGES = ["en", "vi"]
+
 timestamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 logger = create_logger(
     "DeepPresenterUI",
@@ -56,7 +61,7 @@ gradio_css = """
             }
 
             .file-container .upload-container {
-                display: none !important;  /* 隐藏大的拖拽区域 */
+                display: none !important;  /* Hide large drag-drop area */
             }
 
             .file-container .file-list {
@@ -82,7 +87,7 @@ gradio_css = """
 
 
 class UserSession:
-    """简化的用户会话类"""
+    """Simplified user session class."""
 
     def __init__(self):
         self.loop = AgentLoop(
@@ -122,7 +127,7 @@ class ChatDemo:
 
                     chatbot = gr.Chatbot(
                         value=[],
-                        height=300,
+                        height=UI_CHATBOT_HEIGHT,
                         show_label=False,
                         type="messages",
                         render_markdown=True,
@@ -153,7 +158,7 @@ class ChatDemo:
 
                     def _toggle_template_visibility(v: str, lang: str):
                         # Check for Template keyword in any language
-                        template_keywords = [get_text("output_template", "en"), get_text("output_template", "vi")]
+                        template_keywords = [get_text("output_template", lang) for lang in SUPPORTED_LANGUAGES]
                         is_template = any(kw in v for kw in template_keywords)
                         return gr.update(visible=is_template)
 
@@ -252,7 +257,7 @@ class ChatDemo:
 
                 # Find convert type from any language mapping
                 selected_convert_type = None
-                for check_lang in ["en", "vi"]:
+                for check_lang in SUPPORTED_LANGUAGES:
                     mapping = get_convert_mapping(check_lang)
                     if convert_type_value in mapping:
                         selected_convert_type = mapping[convert_type_value]
@@ -261,7 +266,7 @@ class ChatDemo:
                     selected_convert_type = ConvertType.DEEPPRESENTER
 
                 # Handle auto value in any language
-                auto_values = [get_text("pages_auto", "en"), get_text("pages_auto", "vi")]
+                auto_values = [get_text("pages_auto", lang) for lang in SUPPORTED_LANGUAGES]
                 selected_num_pages = (
                     None if num_pages_value in auto_values else int(num_pages_value)
                 )
@@ -391,6 +396,6 @@ if __name__ == "__main__":
         server_name=serve_url,
         server_port=7861,
         share=False,
-        max_threads=16,
+        max_threads=MAX_THREADS,
         allowed_paths=[WORKSPACE_BASE],
     )

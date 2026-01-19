@@ -1,0 +1,73 @@
+name: Build Windows Desktop
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish to GitHub Releases'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -e deeppresenter
+          pip install gradio platformdirs python-pptx playwright
+
+      - name: Build Python backend
+        run: |
+          pyinstaller backend.spec --clean
+          mkdir -p python-dist
+          cp dist/backend.exe python-dist/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: electron-app/package-lock.json
+
+      - name: Install npm dependencies
+        working-directory: electron-app
+        run: npm ci
+
+      - name: Build Electron app
+        working-directory: electron-app
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ("${{ github.event_name }}" -eq "push") {
+            npx electron-builder --win --publish always
+          } elseif ("${{ inputs.publish }}" -eq "true") {
+            npx electron-builder --win --publish always
+          } else {
+            npx electron-builder --win
+          }
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: |
+            electron-app/dist/*.exe
+            electron-app/dist/latest.yml
+          if-no-files-found: error

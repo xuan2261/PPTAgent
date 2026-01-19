@@ -4,7 +4,6 @@ Provides translation loading and access with fallback chain.
 """
 import json
 from pathlib import Path
-from typing import Optional
 
 LOCALES_DIR = Path(__file__).parent.parent / "locales"
 _translations: dict[str, dict[str, str]] = {}

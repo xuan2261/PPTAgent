@@ -7,6 +7,11 @@ from collections import defaultdict
 from pathlib import Path
 
 from docker.errors import DockerException, NotFound
+
+
+class DockerConnectionError(Exception):
+    """Raised when Docker connection fails."""
+    pass
 from mcp.types import CallToolResult, TextContent
 from openai.types.chat.chat_completion_message_tool_call import (
     ChatCompletionMessageFunctionToolCall as ToolCall,
@@ -164,19 +169,23 @@ class AgentEnv:
         try:
             client = docker.from_env()
             container = client.containers.get(self.workspace.stem)
+            # S3: Log before force remove for audit trail
+            # Note: force=True removes running containers without graceful shutdown
+            # This is intentional to ensure clean workspace state on restart
             warning(
-                f"Found duplicated sandbox container id={self.workspace.stem}, killed."
+                f"Found duplicated sandbox container id={self.workspace.stem}, force removing."
             )
             container.remove(force=True)
-        # happend if cannot find the container
+            info(f"Container {self.workspace.stem} removed successfully.")
+        # happens if cannot find the container
         except NotFound:
             pass
         except DockerException as e:
             error(f"Docker is not accessible: {e}.")
-            sys.exit(1)
+            raise DockerConnectionError(f"Docker is not accessible: {e}") from e
         except Exception as e:
             error(f"Unexpected error when launching docker containers: {e}.")
-            sys.exit(1)
+            raise DockerConnectionError(f"Unexpected error when launching docker containers: {e}") from e
 
         with timer("Connecting MCP servers"):
             connect_tasks = []

@@ -34,6 +34,7 @@ class MCPServer(BaseModel):
 
     def _process_escape(self):
         """Process escape characters in args, url, env"""
+        # S4: Only copy safe proxy variables, filter out sensitive env vars
         for proxy_env in GLOBAL_ENV_LIST:
             if proxy_env in os.environ:
                 self.env[proxy_env] = os.environ[proxy_env]
@@ -179,11 +180,19 @@ class InputRequest(BaseModel):
         """Copy attachments to workspace"""
         if not self.attachments:
             return
-        (workspace / "attachments").mkdir(parents=True, exist_ok=True)
+        attachments_dir = workspace / "attachments"
+        attachments_dir.mkdir(parents=True, exist_ok=True)
+        resolved_workspace = workspace.resolve()
         new_attachments = []
         for att in self.attachments:
-            assert os.path.exists(att), f"Attachment {att} does not exist"
-            dest_path = workspace / "attachments" / Path(att).name
+            # Issue 7: Replace assert with proper validation
+            if not os.path.exists(att):
+                raise FileNotFoundError(f"Attachment {att} does not exist")
+            # S1: Path traversal protection - validate dest is within workspace
+            dest_path = attachments_dir / Path(att).name
+            resolved_dest = dest_path.resolve()
+            if not str(resolved_dest).startswith(str(resolved_workspace)):
+                raise ValueError(f"Path traversal detected: {att}")
             if dest_path.exists():
                 warning(f"Attachment {att} already exists in workspace")
                 continue

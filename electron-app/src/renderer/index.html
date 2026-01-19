@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PPTAgent</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; display: flex; justify-content: center; align-items: center;
+      height: 100vh; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: white;
+    }
+    .loader { text-align: center; padding: 40px; }
+    .spinner {
+      width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;
+      margin: 0 auto 30px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    h1 { margin: 0 0 15px; font-size: 28px; font-weight: 600; }
+    .status { opacity: 0.9; font-size: 14px; }
+    .version { margin-top: 30px; opacity: 0.6; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="loader">
+    <div class="spinner"></div>
+    <h1>PPTAgent</h1>
+    <p class="status">Initializing AI backend...</p>
+    <p class="version" id="version"></p>
+  </div>
+  <script>
+    if (window.electronAPI) {
+      window.electronAPI.getAppInfo().then(info => {
+        document.getElementById('version').textContent = `v${info.version}`;
+      });
+    }
+  </script>
+</body>
+</html>

@@ -41,9 +41,20 @@ ASPECT_RATIOS = {
 
 
 class PlaywrightConverter:
+    """Singleton-pattern Playwright browser manager for HTML to PDF conversion.
+
+    Thread Safety:
+        Uses class-level asyncio.Lock to ensure only one browser instance is created.
+        The browser instance is shared across all PlaywrightConverter instances.
+        Each instance gets its own context and page for isolation.
+
+    Usage:
+        async with PlaywrightConverter() as converter:
+            await converter.convert_to_pdf(html_files, output_pdf, aspect_ratio)
+    """
     _playwright = None
     _browser = None
-    _lock = asyncio.Lock()
+    _lock = asyncio.Lock()  # Protects browser initialization
 
     def __init__(self):
         self.context = None
@@ -162,14 +173,21 @@ async def convert_html_to_pptx(
     if html_dir is None and not html_files:
         raise ValueError("No HTML inputs provided")
 
-    cmd = ["node", str(script_path), "--layout", aspect_ratio]
+    # S2: Path validation before passing to subprocess
+    cmd = ["node", str(script_path.resolve()), "--layout", aspect_ratio]
     if html_dir is not None:
-        cmd.extend(["--html_dir", str(html_dir.resolve())])
+        resolved_html_dir = html_dir.resolve()
+        if not resolved_html_dir.exists():
+            raise FileNotFoundError(f"HTML directory does not exist: {resolved_html_dir}")
+        cmd.extend(["--html_dir", str(resolved_html_dir)])
     else:
         for html_file in html_files:
+            # Paths already resolved above, but validate they still exist
+            if not Path(html_file).exists():
+                raise FileNotFoundError(f"HTML file does not exist: {html_file}")
             cmd.extend(["--html", html_file])
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    cmd.extend(["--output", str(output_path)])
+    cmd.extend(["--output", str(output_path.resolve())])
 
     process = await asyncio.create_subprocess_exec(
         *cmd,

@@ -39,7 +39,7 @@ def get_json_from_response(response: str) -> dict | list:
     response = response.strip()
     try:
         return json.loads(response)
-    except:
+    except (json.JSONDecodeError, ValueError):
         pass
 
     # Try to find JSON by looking for matching braces
@@ -235,11 +235,8 @@ class LLM(BaseModel):
                     errors.append(f"[{endpoint.model}] {e}")
                 except Exception as e:
                     errors.append(f"[{endpoint.model}] {e}")
-                    if self.secret_logging:
-                        identifider = endpoint
-                    else:
-                        identifider = endpoint.model
-                    logging_openai_exceptions(identifider, e)
+                    # Always use model name for logging - never log API keys
+                    logging_openai_exceptions(endpoint.model, e)
         raise ValueError(f"All models failed after {retry_times} retries:\n{errors}")
 
     async def generate_image(
@@ -273,11 +270,8 @@ class LLM(BaseModel):
                     )
                 except Exception as e:
                     errors.append(f"[{endpoint.model}] {e}")
-                    if self.secret_logging:
-                        identifider = endpoint
-                    else:
-                        identifider = endpoint.model
-                    logging_openai_exceptions(identifider, e)
+                    # Always use model name for logging - never log API keys
+                    logging_openai_exceptions(endpoint.model, e)
             raise ValueError(f"All models failed after {retry_times} retries: {errors}")
 
     async def validate(self):
