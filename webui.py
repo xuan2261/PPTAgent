@@ -466,6 +466,10 @@ class ChatDemo:
 if __name__ == "__main__":
     import warnings
 
+    from deeppresenter.utils.log import log_startup
+
+    log_startup("DeepPresenter WebUI")
+
     chat_demo = ChatDemo()
     demo = chat_demo.create_interface()
 

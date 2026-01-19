@@ -1,10 +1,16 @@
+import atexit
 import functools
 import inspect
 import logging
+import os
+import platform
+import sys
 import time
 import traceback
 from collections.abc import Callable, Coroutine
 from contextvars import ContextVar
+from datetime import datetime
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Any, ParamSpec, TypeVar, overload
 
@@ -38,6 +44,62 @@ _context_logger: ContextVar[logging.Logger | None] = ContextVar(
 P = ParamSpec("P")
 R = TypeVar("R")
 
+# Global file handler singleton
+_global_file_handler: logging.Handler | None = None
+
+
+def get_global_file_handler() -> logging.Handler:
+    """Get or create the global file handler for unified logging."""
+    global _global_file_handler
+    if _global_file_handler is None:
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        log_file = log_dir / f"pptagent-{datetime.now().strftime('%Y%m%d')}.log"
+
+        _global_file_handler = RotatingFileHandler(
+            log_file,
+            maxBytes=10 * 1024 * 1024,  # 10MB
+            backupCount=5,
+            encoding="utf-8",
+        )
+        _global_file_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(
+            "%(levelname)-4s %(asctime)s [%(name)s] %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+        _global_file_handler.setFormatter(formatter)
+    return _global_file_handler
+
+
+def log_startup(app_name: str = "PPTAgent") -> None:
+    """Log application startup information."""
+    logger = get_logger()
+    logger.info("=" * 60)
+    logger.info(f"{app_name} Starting")
+    logger.info("=" * 60)
+    logger.info(f"Python: {sys.version}")
+    logger.info(f"Platform: {platform.platform()}")
+    logger.info(f"Working Dir: {Path.cwd()}")
+
+    # Log key environment variables
+    key_vars = ["LOG_LEVEL", "DEEPPRESENTER_LOG_LEVEL", "DEEPPRESENTER_WORKSPACE_BASE"]
+    for var in key_vars:
+        value = os.environ.get(var, "<not set>")
+        logger.info(f"ENV {var}: {value}")
+
+    logger.info("=" * 60)
+
+    # Register shutdown handler
+    atexit.register(_log_shutdown, app_name)
+
+
+def _log_shutdown(app_name: str) -> None:
+    """Log application shutdown."""
+    logger = get_logger()
+    logger.info("=" * 60)
+    logger.info(f"{app_name} Shutdown Complete")
+    logger.info("=" * 60)
+
 
 def create_logger(
     name: str = __name__, log_file: str | Path | None = None
@@ -66,6 +128,10 @@ def create_logger(
     )
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
+
+    # Attach global file handler for unified logging
+    logger.addHandler(get_global_file_handler())
+
     if log_file is not None:
         path = Path(log_file)
         path.parent.mkdir(parents=True, exist_ok=True)

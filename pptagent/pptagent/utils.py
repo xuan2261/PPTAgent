@@ -7,8 +7,11 @@ import shutil
 import subprocess
 import tempfile
 import traceback
+from datetime import datetime
 from itertools import product
+from logging.handlers import RotatingFileHandler
 from os.path import dirname, exists, join
+from pathlib import Path
 from shutil import which
 from time import sleep, time
 from typing import Any
@@ -49,19 +52,46 @@ class Language(BaseModel):
         return Language(lid="en")
 
 
+# Global file handler singleton for pptagent
+_global_file_handler: logging.Handler | None = None
+
+
+def _get_global_file_handler() -> logging.Handler:
+    """Get or create the global file handler for unified logging."""
+    global _global_file_handler
+    if _global_file_handler is None:
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        log_file = log_dir / f"pptagent-{datetime.now().strftime('%Y%m%d')}.log"
+
+        _global_file_handler = RotatingFileHandler(
+            log_file,
+            maxBytes=10 * 1024 * 1024,  # 10MB
+            backupCount=5,
+            encoding="utf-8",
+        )
+        _global_file_handler.setLevel(logging.DEBUG)
+        formatter = logging.Formatter(
+            "%(levelname)-4s %(asctime)s [%(name)s] %(filename)s:%(lineno)d - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+        _global_file_handler.setFormatter(formatter)
+    return _global_file_handler
+
+
 def get_logger(name="pptagent", level=None):
     """
     Get a logger with the specified name and level.
 
     Args:
         name (str): The name of the logger.
-        level (int): The logging level (default: logging.INFO).
+        level (int): The logging level (default: logging.DEBUG).
 
     Returns:
         logging.Logger: A configured logger instance.
     """
     if level is None:
-        level = int(os.environ.get("LOG_LEVEL", logging.WARNING))
+        level = int(os.environ.get("LOG_LEVEL", logging.DEBUG))
 
     logger = logging.getLogger(name)
     logger.setLevel(level)
@@ -80,6 +110,9 @@ def get_logger(name="pptagent", level=None):
 
         # Add handler to logger
         logger.addHandler(console_handler)
+
+        # Add global file handler for unified logging
+        logger.addHandler(_get_global_file_handler())
 
     return logger
 

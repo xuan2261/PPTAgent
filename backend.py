@@ -46,6 +46,10 @@ signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 def main():
+    from deeppresenter.utils.log import log_startup
+
+    log_startup("PPTAgent Backend")
+
     logger.info('Starting PPTAgent backend...')
     from webui import ChatDemo
     from deeppresenter.utils.constants import WORKSPACE_BASE

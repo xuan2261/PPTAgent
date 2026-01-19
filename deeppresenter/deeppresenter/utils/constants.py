@@ -10,7 +10,10 @@ from platformdirs import user_cache_dir
 PACKAGE_DIR = Path(__file__).parent.parent
 
 # ============ Logging ===========
-LOGGING_LEVEL = int(os.getenv("DEEPPRESENTER_LOG_LEVEL", logging.WARNING))
+# LOG_LEVEL takes priority, fallback to DEEPPRESENTER_LOG_LEVEL, default DEBUG
+LOGGING_LEVEL = int(
+    os.getenv("LOG_LEVEL", os.getenv("DEEPPRESENTER_LOG_LEVEL", logging.DEBUG))
+)
 MAX_LOGGING_LENGTH = int(os.getenv("DEEPPRESENTER_MAX_LOGGING_LENGTH", 1024))
 
 # ============ Agent  ============
