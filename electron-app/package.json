@@ -1,49 +1,49 @@
 {
-  "name": "pptagent-desktop",
-  "version": "2.0.3",
-  "description": "PPTAgent Desktop - AI Presentation Generator",
-  "main": "src/main.js",
-  "scripts": {
-    "start": "electron .",
-    "build": "electron-builder --win",
-    "build:publish": "electron-builder --win --publish always"
-  },
-  "author": "ICIP-CAS",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^33.0.0",
-    "electron-builder": "^25.0.0"
-  },
-  "dependencies": {
-    "electron-updater": "^6.3.0",
-    "tree-kill": "^1.2.2"
-  },
-  "build": {
-    "appId": "com.icip.pptagent",
-    "productName": "PPTAgent",
-    "copyright": "Copyright © 2025 ICIP-CAS",
-    "directories": {
-      "output": "dist"
-    },
-    "extraResources": [
-      {
-        "from": "../python-dist/",
-        "to": "backend/"
-      }
-    ],
-    "win": {
-      "target": "nsis",
-      "icon": "resources/icons/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "xuan2261",
-      "repo": "PPTAgent"
-    }
-  }
+    "name":  "pptagent-desktop",
+    "version":  "2.0.4",
+    "description":  "PPTAgent Desktop - AI Presentation Generator",
+    "main":  "src/main.js",
+    "scripts":  {
+                    "start":  "electron .",
+                    "build":  "electron-builder --win",
+                    "build:publish":  "electron-builder --win --publish always"
+                },
+    "author":  "ICIP-CAS",
+    "license":  "MIT",
+    "devDependencies":  {
+                            "electron":  "^33.0.0",
+                            "electron-builder":  "^25.0.0"
+                        },
+    "dependencies":  {
+                         "electron-updater":  "^6.3.0",
+                         "tree-kill":  "^1.2.2"
+                     },
+    "build":  {
+                  "appId":  "com.icip.pptagent",
+                  "productName":  "PPTAgent",
+                  "copyright":  "Copyright © 2025 ICIP-CAS",
+                  "directories":  {
+                                      "output":  "dist"
+                                  },
+                  "extraResources":  [
+                                         {
+                                             "from":  "../python-dist/",
+                                             "to":  "backend/"
+                                         }
+                                     ],
+                  "win":  {
+                              "target":  "nsis",
+                              "icon":  "resources/icons/icon.ico"
+                          },
+                  "nsis":  {
+                               "oneClick":  false,
+                               "allowToChangeInstallationDirectory":  true,
+                               "createDesktopShortcut":  true
+                           },
+                  "publish":  {
+                                  "provider":  "github",
+                                  "owner":  "xuan2261",
+                                  "repo":  "PPTAgent"
+                              }
+              }
 }
