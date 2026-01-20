@@ -1,6 +1,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 const net = require('net');
+const fs = require('fs');
 const kill = require('tree-kill');
 const { app } = require('electron');
 
@@ -67,6 +68,16 @@ class BackendManager {
 
       const backendPath = this.getBackendPath();
       console.log(`Starting backend: ${backendPath}`);
+
+      // Check if backend executable exists before spawning
+      if (!fs.existsSync(backendPath)) {
+        const isDev = !app.isPackaged;
+        const helpMsg = isDev
+          ? 'Run "pyinstaller backend.spec --clean && cp dist/backend.exe python-dist/" to build it.'
+          : 'Please reinstall the application or contact support.';
+        reject(new Error(`Backend not found: ${backendPath}\n\n${helpMsg}`));
+        return;
+      }
 
       this.process = spawn(backendPath, ['-u', '--port', this.port.toString()], {
         stdio: ['pipe', 'pipe', 'pipe'],
